@@ -222,4 +222,6 @@ README.md
 
 # Generated outputs (results and plots are local artifacts)
 results/
-plots/
+plots/
+
+IMPLEMENTATION.md
