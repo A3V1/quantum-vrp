@@ -253,23 +253,3 @@ def run_vrp_experiment(num_customers, num_vehicles=2, seed=42, depot=0):
     """
 ```
 
-## 🤝 Contributing
-
-Contributions welcome! Areas for improvement:
-
-- Larger problem instances (5+ customers)
-- Additional quantum algorithms (VQC, etc.)
-- Advanced noise models
-- Performance optimizations
-- Documentation enhancements
-
-## 📚 References
-
-1. Kochol, P. (2004). "Polynomial-time approximation algorithms for vehicle routing problems."
-2. Goemans, M. X., & Williamson, D. P. (1995). "Improved approximation algorithms for max cut and max satisfiability problems using SDP rounding."
-3. Qiskit Documentation: https://qiskit.org/documentation/
-4. IBM ILOG CPLEX: https://www.ibm.com/products/ilog-cplex-optimization-studio
-
----
-
-**Note**: This is an educational/experimental implementation demonstrating quantum computing applications to combinatorial optimization. It does not claim quantum advantage over classical methods on current hardware.
