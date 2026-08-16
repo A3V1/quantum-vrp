@@ -31,8 +31,8 @@ Quantum Approximate Optimization Algorithm (QAOA)
 
 The quantum solutions are compared against a classical CPLEX solution.
 The project is then extended with simulated quantum noise to study how
-different noise sources affect solution quality and the probability of
-recovering an optimal or feasible route.
+two different noise sources (depolarizing and amplitude damping) affect
+solution quality and the probability of recovering an optimal or feasible route.
 
 Important: This project is intended as a small-scale
 experimental/educational implementation. It does not claim quantum
@@ -52,8 +52,8 @@ Solve the QUBO using VQE and QAOA through Qiskit.
 
 Benchmark quantum solutions against IBM ILOG CPLEX.
 
-Evaluate quantum-solution robustness under different simulated noise
-models and visualize the results.
+Evaluate quantum-solution robustness under depolarizing and amplitude
+damping noise models and visualize the results.
 
 3. Final Project Scope
 
@@ -168,6 +168,9 @@ These can be considered future extensions.
     |
     v
     Visualization/Results
+
+    Note: Two noise models are simulated: depolarizing noise and
+    amplitude damping noise.
 
 5.  Technology Stack
 
@@ -553,53 +556,52 @@ optimization result.
 
 The basic workflow is:
 
-QAOA/VQE Circuit
-|
-+--------> Ideal Simulation
-|
-+--------> Noisy Simulation
-|
-+---------+---------+
-| | |
-v v v
-Depolarizing Bit Flip Readout
+ QAOA/VQE Circuit
+ |
+ +---------> Ideal Simulation
+ |
+ +---------> Noisy Simulation
+ |
+ +---------+---------+
+ | |
+ v v
+ Depolarizing Amplitude
+ Noise Damping
 
 15. Noise Models
+
+Two noise models are implemented using Qiskit Aer.
 
 15.1 Depolarizing Noise
 
 Depolarizing noise represents a general class of quantum errors that can
-move a state toward a more mixed state.
+move a qubit state toward a completely mixed state. It is applied to
+single-qubit gates (rx, ry, rz) and two-qubit gates (cx, cz).
 
-The experiment varies the noise probability and measures how the
-solution changes.
+The experiment varies the depolarizing rate and measures how the
+optimal-solution probability changes.
 
-15.2 Bit-Flip Noise
+15.2 Amplitude Damping
 
-Bit-flip noise represents:
+Amplitude damping models energy dissipation, i.e. spontaneous emission
+from excited to ground state. It is applied at the measurement stage and
+represents a realistic physical error mechanism where a qubit loses
+energy to its environment.
 
-[ |0\rangle {=tex}\leftrightarrow {=tex}|1\rangle{=tex} ]
-
-This can change the measured binary solution.
-
-15.3 Readout Error
-
-Readout error occurs when the quantum state is correct but the
-measurement reports the wrong classical bit.
-
-This can affect the frequency with which the correct route is observed.
+This affects the reliability of the final measurement and therefore
+changes how often the correct route is recovered.
 
 16. Noise Experiment
 
-For each noise model, multiple noise levels can be tested.
+For each noise level, the QAOA circuit is run and the optimal-solution
+probability is recorded.
 
-For example:
+Error rates tested:
 
-0
-0.001
-0.005
+0.00 (ideal)
 0.01
-0.02
+0.05
+0.10
 
 For each level, run multiple shots and calculate:
 
@@ -733,12 +735,10 @@ Compare solution quality and circuit complexity.
 
 Experiment 5 --- Noise Robustness
 
-Use QAOA and/or VQE under:
+Use QAOA under:
 
-Ideal
-Depolarizing Noise
-Bit-Flip Noise
-Readout Error
+Ideal (rate = 0.00)
+Depolarizing + Amplitude Damping (rates = 0.01, 0.05, 0.10)
 
 Measure optimal-solution probability as noise increases.
 
@@ -1047,8 +1047,8 @@ Runtime
 
 Noise results
 
-Noise Model
-Noise Level
+Noise Model (Depolarizing + Amplitude Damping)
+Noise Level (0.00, 0.01, 0.05, 0.10)
 Optimal-Solution Probability
 Route Quality
 
@@ -1119,7 +1119,7 @@ VQE Variational quantum optimization
 QAOA Combinatorial quantum optimization
 QUBO Binary quadratic formulation of VRP
 IBM CPLEX Classical benchmark
-Noise models Aer noise simulations
+Noise models Depolarizing + amplitude damping via Qiskit Aer
 Robustness Optimal-solution probability and cost under noise
 Optimized routes Route decoding and visualization
 Performance Cost, gap, feasibility, runtime and robustness plots
@@ -1136,9 +1136,9 @@ reference solution. I then mapped the same optimization problem to
 quantum form and solved it using VQE and QAOA in Qiskit. I decoded the
 resulting binary solutions into vehicle routes and compared them with
 CPLEX using route cost, feasibility, runtime and optimality gap.
-Finally, I used Qiskit Aer to introduce different noise models and
-measured how the probability of recovering the optimal solution
-changed as noise increased."
+Finally, I used Qiskit Aer to introduce depolarizing and amplitude
+damping noise and measured how the probability of recovering the
+optimal solution changed as noise increased."
 
 29. Core Concept in One Diagram
 
@@ -1174,12 +1174,13 @@ changed as noise increased."
     Qiskit Aer
     |
     +------+------+
-    | | |
-    v v v
-    Ideal Depol. Bit Flip
-    \ | /
-    \ | /
-    v v v
+    | |
+    v v
+    Ideal Depol. +
+             Amp. Damping
+    \ /
+    \ /
+    v v
     Robustness
     Analysis
     |
