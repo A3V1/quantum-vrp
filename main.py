@@ -349,11 +349,11 @@ if __name__ == "__main__":
     # --------------------------------------------------------
     # Experiment 2: 4-City VRP (1 Depot + 3 Customers, 1 Vehicles)
     # --------------------------------------------------------
-    results_4c = run_vrp_experiment(
-        num_customers=3,
-        num_vehicles=1,
-        seed=42
-    )
+    # results_4c = run_vrp_experiment(
+    #     num_customers=3,
+    #     num_vehicles=1,
+    #     seed=42
+    # )
 
     # --------------------------------------------------------
     # Experiment 3: Noise Robustness (on the 3-City problem)
